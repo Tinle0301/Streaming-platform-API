@@ -27,7 +27,7 @@ func NewClient(hub *Hub, conn *websocket.Conn, userID string) *Client {
 // reads from this goroutine.
 func (c *Client) ReadPump() {
 	defer func() {
-		c.hub.unregister <- c
+		c.hub.Unregister <- c
 		c.conn.Close()
 	}()
 

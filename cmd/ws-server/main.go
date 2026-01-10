@@ -9,15 +9,15 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/gorilla/websocket"
-	"github.com/yourusername/streaming-platform-api/internal/websocket"
+	gorillaWS "github.com/gorilla/websocket"
+	"github.com/tinle0301/streaming-platform-api/internal/websocket"
 )
 
 const (
 	defaultWSPort = "8081"
 )
 
-var upgrader = websocket.Upgrader{
+var upgrader = gorillaWS.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {

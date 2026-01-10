@@ -29,7 +29,6 @@ linters:
     - durationcheck # Checks for duration multiplication
     - errorlint     # Finds code that will cause problems with error wrapping
     - exhaustive    # Checks exhaustiveness of enum switch statements
-    - exportloopref # Checks for pointers to enclosing loop variables
     - gocognit      # Computes cognitive complexity
     - goconst       # Finds repeated strings that could be constants
     - gocritic      # Opinionated Go linter
@@ -55,7 +54,6 @@ linters-settings:
     check-blank: true
     
   govet:
-    check-shadowing: true
     enable-all: true
     
   gocyclo:

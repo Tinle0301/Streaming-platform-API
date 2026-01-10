@@ -19,13 +19,13 @@ type Hub struct {
 	rooms map[string]map[*Client]bool
 
 	// Inbound messages from the clients
-	broadcast chan *Message
+	Broadcast chan *Message
 
 	// Register requests from the clients
-	register chan *Client
+	Register chan *Client
 
 	// Unregister requests from clients
-	unregister chan *Client
+	Unregister chan *Client
 
 	// Mutex for thread-safe operations
 	mu sync.RWMutex
@@ -36,13 +36,13 @@ type Hub struct {
 
 // HubMetrics tracks hub statistics
 type HubMetrics struct {
-	TotalConnections    int64
-	ActiveConnections   int32
-	TotalMessagesSent   int64
-	TotalMessagesRecv   int64
-	LastMessageTime     time.Time
-	RoomCounts          map[string]int
-	mu                  sync.RWMutex
+	TotalConnections  int64
+	ActiveConnections int32
+	TotalMessagesSent int64
+	TotalMessagesRecv int64
+	LastMessageTime   time.Time
+	RoomCounts        map[string]int
+	mu                sync.RWMutex
 }
 
 // Message represents a WebSocket message
@@ -98,9 +98,9 @@ func NewHub() *Hub {
 	return &Hub{
 		clients:    make(map[*Client]bool),
 		rooms:      make(map[string]map[*Client]bool),
-		broadcast:  make(chan *Message, 1000),
-		register:   make(chan *Client),
-		unregister: make(chan *Client),
+		Broadcast:  make(chan *Message, 1000),
+		Register:   make(chan *Client),
+		Unregister: make(chan *Client),
 		metrics: &HubMetrics{
 			RoomCounts: make(map[string]int),
 		},
@@ -119,13 +119,13 @@ func (h *Hub) Run(ctx context.Context) {
 			h.shutdown()
 			return
 
-		case client := <-h.register:
+		case client := <-h.Register:
 			h.registerClient(client)
 
-		case client := <-h.unregister:
+		case client := <-h.Unregister:
 			h.unregisterClient(client)
 
-		case message := <-h.broadcast:
+		case message := <-h.Broadcast:
 			h.broadcastMessage(message)
 
 		case <-ticker.C:
@@ -203,7 +203,7 @@ func (h *Hub) broadcastMessage(message *Message) {
 		default:
 			// Client's send buffer is full, close the connection
 			log.Printf("Client send buffer full, closing connection: userID=%s", client.userID)
-			h.unregister <- client
+			h.Unregister <- client
 		}
 	}
 
@@ -223,7 +223,7 @@ func (h *Hub) JoinRoom(room string, client *Client) {
 	client.rooms[room] = true
 	h.metrics.RoomCounts[room]++
 
-	log.Printf("Client joined room: userID=%s, room=%s, count=%d", 
+	log.Printf("Client joined room: userID=%s, room=%s, count=%d",
 		client.userID, room, len(h.rooms[room]))
 }
 
@@ -260,7 +260,7 @@ func (h *Hub) BroadcastToRoom(room string, messageType string, data map[string]i
 		Timestamp: time.Now(),
 	}
 
-	h.broadcast <- message
+	h.Broadcast <- message
 }
 
 // BroadcastToAll sends a message to all connected clients
@@ -271,7 +271,7 @@ func (h *Hub) BroadcastToAll(messageType string, data map[string]interface{}) {
 		Timestamp: time.Now(),
 	}
 
-	h.broadcast <- message
+	h.Broadcast <- message
 }
 
 // GetMetrics returns current hub metrics
