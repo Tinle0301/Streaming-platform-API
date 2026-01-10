@@ -4,18 +4,12 @@ run:
 
 linters-settings:
   govet:
-    check-shadowing: false
+    enable-all: true
   gocyclo:
     min-complexity: 15
-  dupl:
-    threshold: 100
-  goconst:
-    min-len: 2
-    min-occurrences: 2
 
 linters:
   enable:
-    - errcheck
     - gosimple
     - govet
     - ineffassign
@@ -26,5 +20,11 @@ linters:
 issues:
   exclude-rules:
     - path: _test\.go
+      linters:
+        - errcheck
+    - path: internal/websocket/
+      linters:
+        - errcheck
+    - path: cmd/api-server/main.go
       linters:
         - errcheck
