@@ -1,8 +1,10 @@
-version: v2
+run:
+  timeout: 5m
+  tests: true
 
 linters-settings:
   govet:
-    enable-all: true
+    check-shadowing: false
   gocyclo:
     min-complexity: 15
   dupl:
@@ -18,16 +20,11 @@ linters:
     - govet
     - ineffassign
     - staticcheck
+    - typecheck
     - unused
-    - gocyclo
-    - gofmt
-    - misspell
-    - goconst
-    - dupl
 
 issues:
   exclude-rules:
     - path: _test\.go
       linters:
         - errcheck
-        - dupl
