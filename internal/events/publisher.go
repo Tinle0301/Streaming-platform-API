@@ -7,8 +7,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/redis/go-redis/v9"
 	amqp "github.com/rabbitmq/amqp091-go"
+	"github.com/redis/go-redis/v9"
 )
 
 // Event represents a domain event in the system
@@ -143,13 +143,13 @@ func NewRabbitMQPublisher(amqpURL string) (*RabbitMQPublisher, error) {
 
 	// Declare exchange for events
 	err = channel.ExchangeDeclare(
-		"events",  // name
-		"topic",   // type
-		true,      // durable
-		false,     // auto-deleted
-		false,     // internal
-		false,     // no-wait
-		nil,       // arguments
+		"events", // name
+		"topic",  // type
+		true,     // durable
+		false,    // auto-deleted
+		false,    // internal
+		false,    // no-wait
+		nil,      // arguments
 	)
 	if err != nil {
 		channel.Close()
@@ -184,10 +184,10 @@ func (p *RabbitMQPublisher) Publish(ctx context.Context, event Event) error {
 
 	err = p.channel.PublishWithContext(
 		ctx,
-		"events",    // exchange
-		routingKey,  // routing key
-		false,       // mandatory
-		false,       // immediate
+		"events",   // exchange
+		routingKey, // routing key
+		false,      // mandatory
+		false,      // immediate
 		amqp.Publishing{
 			ContentType:  "application/json",
 			Body:         eventBytes,

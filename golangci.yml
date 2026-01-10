@@ -1,4 +1,9 @@
-version: v2
+run:
+  timeout: 5m
+  tests: true
+  skip-dirs:
+    - bin
+    - vendor
 
 linters-settings:
   govet:
@@ -18,6 +23,7 @@ linters:
     - govet
     - ineffassign
     - staticcheck
+    - typecheck
     - unused
     - gocyclo
     - gofmt
