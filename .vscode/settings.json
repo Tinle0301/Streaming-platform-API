@@ -1,0 +1,117 @@
+{
+  // Go specific settings
+  "go.useLanguageServer": true,
+  "go.languageServerFlags": [
+    "-rpc.trace"
+  ],
+  "go.lintTool": "golangci-lint",
+  "go.lintOnSave": "workspace",
+  "go.formatTool": "goimports",
+  "go.formatFlags": [],
+  "go.vetOnSave": "workspace",
+  "go.buildOnSave": "workspace",
+  "go.testOnSave": false,
+  "go.coverOnSave": false,
+  "go.toolsManagement.autoUpdate": true,
+  
+  // Enable gopls features
+  "gopls": {
+    "ui.semanticTokens": true,
+    "ui.completion.usePlaceholders": true,
+    "ui.diagnostic.analyses": {
+      "unusedparams": true,
+      "shadow": true
+    },
+    "formatting.gofumpt": true
+  },
+  
+  // Editor settings
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "editor.rulers": [
+    80,
+    120
+  ],
+  "editor.tabSize": 4,
+  "editor.insertSpaces": false,
+  "editor.detectIndentation": true,
+  
+  // File associations
+  "files.associations": {
+    "*.graphqls": "graphql",
+    "*.graphql": "graphql",
+    "Makefile": "makefile",
+    "*.env*": "dotenv"
+  },
+  
+  // Exclude files from search
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/bin": true,
+    "**/vendor": true,
+    "**/*.test": true
+  },
+  
+  // Auto-save
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  
+  // Terminal settings
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.fontSize": 13,
+  
+  // GraphQL settings (if GraphQL extension is installed)
+  "graphql-config.load.rootDir": "./api",
+  
+  // Docker settings
+  "docker.dockerPath": "/usr/local/bin/docker",
+  
+  // Testing
+  "go.testFlags": [
+    "-v",
+    "-race"
+  ],
+  "go.testTimeout": "30s",
+  "go.coverMode": "atomic",
+  
+  // Recommendations
+  "[go]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  
+  "[go.mod]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  
+  "[graphql]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "GraphQL.vscode-graphql"
+  },
+  
+  "[markdown]": {
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": {
+      "comments": "off",
+      "strings": "off",
+      "other": "off"
+    }
+  },
+  
+  // Search settings
+  "search.exclude": {
+    "**/bin": true,
+    "**/vendor": true,
+    "**/dist": true,
+    "**/*.test": true,
+    "**/coverage.*": true
+  }
+}

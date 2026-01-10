@@ -1,0 +1,112 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "docker-up",
+      "type": "shell",
+      "command": "make docker-up",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "docker-down",
+      "type": "shell",
+      "command": "make docker-down",
+      "problemMatcher": []
+    },
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "make build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        "$go"
+      ]
+    },
+    {
+      "label": "test",
+      "type": "shell",
+      "command": "make test",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        "$go"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "test-coverage",
+      "type": "shell",
+      "command": "make test-coverage",
+      "problemMatcher": [
+        "$go"
+      ]
+    },
+    {
+      "label": "lint",
+      "type": "shell",
+      "command": "make lint",
+      "problemMatcher": [
+        "$go"
+      ]
+    },
+    {
+      "label": "run-api",
+      "type": "shell",
+      "command": "make run-api",
+      "problemMatcher": [
+        "$go"
+      ],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "run-ws",
+      "type": "shell",
+      "command": "make run-ws",
+      "problemMatcher": [
+        "$go"
+      ],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "clean",
+      "type": "shell",
+      "command": "make clean",
+      "problemMatcher": []
+    },
+    {
+      "label": "deps",
+      "type": "shell",
+      "command": "make deps",
+      "problemMatcher": []
+    },
+    {
+      "label": "generate-graphql",
+      "type": "shell",
+      "command": "make generate",
+      "problemMatcher": []
+    }
+  ]
+}

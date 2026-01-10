@@ -1,0 +1,137 @@
+{
+  "Table-Driven Test": {
+    "prefix": "testTable",
+    "body": [
+      "func Test${1:FunctionName}(t *testing.T) {",
+      "\ttests := []struct {",
+      "\t\tname string",
+      "\t\t${2:input} ${3:type}",
+      "\t\twant ${4:type}",
+      "\t\twantErr bool",
+      "\t}{",
+      "\t\t{",
+      "\t\t\tname: \"${5:test case}\",",
+      "\t\t\t${2}: ${6:value},",
+      "\t\t\twant: ${7:expected},",
+      "\t\t\twantErr: false,",
+      "\t\t},",
+      "\t}",
+      "",
+      "\tfor _, tt := range tests {",
+      "\t\tt.Run(tt.name, func(t *testing.T) {",
+      "\t\t\tgot, err := ${1}(tt.${2})",
+      "\t\t\tif (err != nil) != tt.wantErr {",
+      "\t\t\t\tt.Errorf(\"${1}() error = %v, wantErr %v\", err, tt.wantErr)",
+      "\t\t\t\treturn",
+      "\t\t\t}",
+      "\t\t\tif !reflect.DeepEqual(got, tt.want) {",
+      "\t\t\t\tt.Errorf(\"${1}() = %v, want %v\", got, tt.want)",
+      "\t\t\t}",
+      "\t\t})",
+      "\t}",
+      "}"
+    ],
+    "description": "Create a table-driven test"
+  },
+  "HTTP Handler": {
+    "prefix": "httpHandler",
+    "body": [
+      "func ${1:HandlerName}(w http.ResponseWriter, r *http.Request) {",
+      "\t// Extract parameters",
+      "\t${2:// TODO: Implementation}",
+      "\t",
+      "\t// Process request",
+      "\t",
+      "\t// Send response",
+      "\tw.Header().Set(\"Content-Type\", \"application/json\")",
+      "\tw.WriteHeader(http.StatusOK)",
+      "\tjson.NewEncoder(w).Encode(${3:response})",
+      "}"
+    ],
+    "description": "Create an HTTP handler function"
+  },
+  "GraphQL Resolver": {
+    "prefix": "gqlResolver",
+    "body": [
+      "func (r *${1:Resolver}) ${2:FieldName}(ctx context.Context, obj *${3:ParentType}) (*${4:ReturnType}, error) {",
+      "\t// TODO: Implement resolver logic",
+      "\treturn nil, nil",
+      "}"
+    ],
+    "description": "Create a GraphQL resolver"
+  },
+  "Context with Timeout": {
+    "prefix": "ctxTimeout",
+    "body": [
+      "ctx, cancel := context.WithTimeout(context.Background(), ${1:5}*time.Second)",
+      "defer cancel()"
+    ],
+    "description": "Create context with timeout"
+  },
+  "Error Check": {
+    "prefix": "iferr",
+    "body": [
+      "if err != nil {",
+      "\treturn ${1:nil, }err",
+      "}"
+    ],
+    "description": "Basic error check"
+  },
+  "Log Error": {
+    "prefix": "logerr",
+    "body": [
+      "if err != nil {",
+      "\tlog.Printf(\"${1:error message}: %v\", err)",
+      "\treturn ${2:nil, }err",
+      "}"
+    ],
+    "description": "Log and return error"
+  },
+  "Goroutine": {
+    "prefix": "go",
+    "body": [
+      "go func() {",
+      "\t${1:// TODO: Implementation}",
+      "}()"
+    ],
+    "description": "Create a goroutine"
+  },
+  "Defer Cleanup": {
+    "prefix": "defer",
+    "body": [
+      "defer func() {",
+      "\tif err := ${1:resource}.Close(); err != nil {",
+      "\t\tlog.Printf(\"error closing ${1}: %v\", err)",
+      "\t}",
+      "}()"
+    ],
+    "description": "Defer resource cleanup"
+  },
+  "JSON Response": {
+    "prefix": "jsonResp",
+    "body": [
+      "w.Header().Set(\"Content-Type\", \"application/json\")",
+      "w.WriteHeader(http.Status${1:OK})",
+      "if err := json.NewEncoder(w).Encode(${2:data}); err != nil {",
+      "\tlog.Printf(\"error encoding response: %v\", err)",
+      "}"
+    ],
+    "description": "Send JSON response"
+  },
+  "Middleware": {
+    "prefix": "middleware",
+    "body": [
+      "func ${1:MiddlewareName}(next http.Handler) http.Handler {",
+      "\treturn http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {",
+      "\t\t// Before handler",
+      "\t\t${2:// TODO: Implementation}",
+      "\t\t",
+      "\t\tnext.ServeHTTP(w, r)",
+      "\t\t",
+      "\t\t// After handler",
+      "\t})",
+      "}"
+    ],
+    "description": "Create HTTP middleware"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "recommendations": [
+    // Go Development
+    "golang.go",
+    
+    // GraphQL
+    "graphql.vscode-graphql",
+    "graphql.vscode-graphql-syntax",
+    
+    // Docker
+    "ms-azuretools.vscode-docker",
+    
+    // YAML/JSON
+    "redhat.vscode-yaml",
+    
+    // Markdown
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+    
+    // Git
+    "eamodio.gitlens",
+    "mhutchie.git-graph",
+    
+    // Testing
+    "hbenl.vscode-test-explorer",
+    "ethan-reesor.vscode-go-test-adapter",
+    
+    // Code Quality
+    "editorconfig.editorconfig",
+    "streetsidesoftware.code-spell-checker",
+    
+    // Terraform (for AWS deployment)
+    "hashicorp.terraform",
+    
+    // REST Client (for testing APIs)
+    "humao.rest-client",
+    
+    // Error Lens (inline error display)
+    "usernamehw.errorlens",
+    
+    // Better Comments
+    "aaron-bond.better-comments",
+    
+    // Path Intellisense
+    "christian-kohler.path-intellisense",
+    
+    // Database Client
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-pg",
+    
+    // Bracket Pair Colorizer
+    "coenraads.bracket-pair-colorizer-2",
+    
+    // TODO Highlight
+    "wayou.vscode-todo-highlight",
+    
+    // Thunder Client (API testing)
+    "rangav.vscode-thunder-client"
+  ]
+}

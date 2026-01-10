@@ -1,0 +1,364 @@
+scalar Time
+scalar JSON
+
+# Query definitions
+type Query {
+  """
+  Get a single stream by ID
+  """
+  stream(id: ID!): Stream
+  
+  """
+  Get multiple streams with filtering and pagination
+  """
+  streams(
+    filter: StreamFilter
+    limit: Int = 20
+    offset: Int = 0
+  ): StreamConnection!
+  
+  """
+  Get the current authenticated viewer
+  """
+  viewer: User
+  
+  """
+  Get notifications for the current user
+  """
+  notifications(
+    limit: Int = 50
+    unreadOnly: Boolean = false
+  ): [Notification!]!
+  
+  """
+  Search for users
+  """
+  searchUsers(query: String!, limit: Int = 10): [User!]!
+  
+  """
+  Get stream analytics
+  """
+  streamAnalytics(streamId: ID!, timeRange: TimeRange!): StreamAnalytics
+}
+
+# Mutation definitions
+type Mutation {
+  """
+  Start a new live stream
+  """
+  startStream(input: StartStreamInput!): Stream!
+  
+  """
+  Stop an active stream
+  """
+  stopStream(id: ID!): Stream!
+  
+  """
+  Update stream metadata
+  """
+  updateStream(id: ID!, input: UpdateStreamInput!): Stream!
+  
+  """
+  Follow a user
+  """
+  followUser(userId: ID!): User!
+  
+  """
+  Unfollow a user
+  """
+  unfollowUser(userId: ID!): User!
+  
+  """
+  Send a notification (internal use)
+  """
+  sendNotification(input: NotificationInput!): Notification!
+  
+  """
+  Mark notification as read
+  """
+  markNotificationRead(id: ID!): Notification!
+  
+  """
+  Mark all notifications as read
+  """
+  markAllNotificationsRead: Boolean!
+  
+  """
+  Send a chat message
+  """
+  sendChatMessage(streamId: ID!, message: String!): ChatMessage!
+  
+  """
+  Raid another stream
+  """
+  raidStream(fromStreamId: ID!, toStreamId: ID!): RaidResult!
+}
+
+# Subscription definitions
+type Subscription {
+  """
+  Subscribe to stream status changes
+  """
+  streamStatusChanged(streamId: ID!): Stream!
+  
+  """
+  Subscribe to new notifications
+  """
+  notificationReceived: Notification!
+  
+  """
+  Subscribe to chat messages for a stream
+  """
+  chatMessage(streamId: ID!): ChatMessage!
+  
+  """
+  Subscribe to viewer count updates
+  """
+  viewerCountChanged(streamId: ID!): ViewerCountUpdate!
+  
+  """
+  Subscribe to raid events
+  """
+  raidEvent(streamId: ID!): RaidEvent!
+}
+
+# Core Types
+
+type Stream {
+  id: ID!
+  title: String!
+  description: String
+  streamer: User!
+  viewerCount: Int!
+  status: StreamStatus!
+  startedAt: Time
+  endedAt: Time
+  thumbnailUrl: String
+  previewUrl: String
+  tags: [String!]!
+  category: Category
+  language: String!
+  isPartner: Boolean!
+  isMature: Boolean!
+  chatEnabled: Boolean!
+  
+  """
+  Current followers watching this stream
+  """
+  followersWatching: Int!
+  
+  """
+  Stream uptime in seconds
+  """
+  uptime: Int
+}
+
+type User {
+  id: ID!
+  username: String!
+  displayName: String!
+  email: String
+  bio: String
+  avatarUrl: String
+  bannerUrl: String
+  followerCount: Int!
+  followingCount: Int!
+  isLive: Boolean!
+  isPartner: Boolean!
+  isAffiliate: Boolean!
+  createdAt: Time!
+  
+  """
+  Current active stream if live
+  """
+  currentStream: Stream
+  
+  """
+  User's recent streams
+  """
+  recentStreams(limit: Int = 5): [Stream!]!
+  
+  """
+  Check if viewer follows this user
+  """
+  isFollowedByViewer: Boolean!
+}
+
+type Notification {
+  id: ID!
+  type: NotificationType!
+  title: String!
+  message: String!
+  data: JSON
+  fromUser: User
+  stream: Stream
+  createdAt: Time!
+  read: Boolean!
+  readAt: Time
+}
+
+type ChatMessage {
+  id: ID!
+  streamId: ID!
+  user: User!
+  message: String!
+  timestamp: Time!
+  badges: [Badge!]!
+  emotes: [Emote!]!
+  color: String
+  isDeleted: Boolean!
+  isModerator: Boolean!
+  isSubscriber: Boolean!
+}
+
+type Category {
+  id: ID!
+  name: String!
+  boxArtUrl: String
+  viewerCount: Int!
+}
+
+type StreamAnalytics {
+  streamId: ID!
+  totalViews: Int!
+  peakViewers: Int!
+  averageViewers: Int!
+  totalWatchTime: Int!
+  newFollowers: Int!
+  chatMessageCount: Int!
+  dataPoints: [AnalyticsDataPoint!]!
+}
+
+type AnalyticsDataPoint {
+  timestamp: Time!
+  viewerCount: Int!
+  chatActivity: Int!
+}
+
+type ViewerCountUpdate {
+  streamId: ID!
+  count: Int!
+  timestamp: Time!
+}
+
+type RaidEvent {
+  id: ID!
+  fromStream: Stream!
+  toStream: Stream!
+  viewerCount: Int!
+  timestamp: Time!
+}
+
+type RaidResult {
+  success: Boolean!
+  fromStream: Stream!
+  toStream: Stream!
+  viewerCount: Int!
+}
+
+type Badge {
+  id: ID!
+  name: String!
+  imageUrl: String!
+}
+
+type Emote {
+  id: ID!
+  name: String!
+  imageUrl: String!
+}
+
+type StreamConnection {
+  edges: [StreamEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type StreamEdge {
+  node: Stream!
+  cursor: String!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+# Enums
+
+enum StreamStatus {
+  OFFLINE
+  LIVE
+  STARTING
+  ENDING
+  ARCHIVED
+}
+
+enum NotificationType {
+  STREAM_LIVE
+  NEW_FOLLOWER
+  CHAT_MENTION
+  RAID_INCOMING
+  RAID_OUTGOING
+  SUBSCRIPTION
+  GIFT_SUBSCRIPTION
+  BITS_CHEERED
+  STREAM_MILESTONE
+  SYSTEM_ANNOUNCEMENT
+}
+
+enum TimeRange {
+  HOUR
+  DAY
+  WEEK
+  MONTH
+  YEAR
+  ALL_TIME
+}
+
+# Input Types
+
+input StreamFilter {
+  status: StreamStatus
+  category: String
+  language: String
+  tags: [String!]
+  isPartner: Boolean
+  minViewers: Int
+  maxViewers: Int
+}
+
+input StartStreamInput {
+  title: String!
+  description: String
+  categoryId: ID!
+  tags: [String!]
+  language: String = "en"
+  isMature: Boolean = false
+}
+
+input UpdateStreamInput {
+  title: String
+  description: String
+  categoryId: ID
+  tags: [String!]
+  isMature: Boolean
+}
+
+input NotificationInput {
+  userId: ID!
+  type: NotificationType!
+  title: String!
+  message: String!
+  data: JSON
+  fromUserId: ID
+  streamId: ID
+}
+
+# Directives
+
+directive @auth on FIELD_DEFINITION
+directive @rateLimit(limit: Int!, window: Int!) on FIELD_DEFINITION
+directive @complexity(value: Int!) on FIELD_DEFINITION

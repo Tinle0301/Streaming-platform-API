@@ -1,0 +1,74 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch API Server",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}/cmd/api-server",
+      "env": {
+        "API_PORT": "8080",
+        "DATABASE_URL": "postgresql://streamhub:streamhub_password@localhost:5432/streamhub",
+        "REDIS_URL": "redis://localhost:6379",
+        "GRAPHQL_PLAYGROUND": "true",
+        "ENVIRONMENT": "development"
+      },
+      "args": [],
+      "showLog": true,
+      "preLaunchTask": "docker-up"
+    },
+    {
+      "name": "Launch WebSocket Server",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}/cmd/ws-server",
+      "env": {
+        "WS_PORT": "8081",
+        "REDIS_URL": "redis://localhost:6379",
+        "ENVIRONMENT": "development"
+      },
+      "args": [],
+      "showLog": true,
+      "preLaunchTask": "docker-up"
+    },
+    {
+      "name": "Debug Current File",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${file}",
+      "showLog": true
+    },
+    {
+      "name": "Debug Current Test",
+      "type": "go",
+      "request": "launch",
+      "mode": "test",
+      "program": "${workspaceFolder}",
+      "args": [
+        "-test.run",
+        "${selectedText}"
+      ],
+      "showLog": true
+    },
+    {
+      "name": "Attach to Process",
+      "type": "go",
+      "request": "attach",
+      "mode": "local",
+      "processId": 0
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Launch All Servers",
+      "configurations": [
+        "Launch API Server",
+        "Launch WebSocket Server"
+      ],
+      "stopAll": true
+    }
+  ]
+}
