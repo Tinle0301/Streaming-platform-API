@@ -12,43 +12,52 @@
 
 ## 🎯 Project Overview
 
-A high-performance API platform built with Go, showcasing production-ready patterns for real-time streaming services. This project demonstrates expertise in:
+A high-performance API platform built with **Go**, showcasing production-ready patterns for real-time streaming services. This project demonstrates expertise in backend development, distributed systems, and cloud-native architecture.
 
-- **GraphQL API** development with custom resolvers
-- **WebSocket** real-time messaging at scale  
-- **Event-driven architecture** with message queues
-- **Microservices** design with Docker containerization
-- **CI/CD pipelines** with automated testing and deployment
+### What This Project Demonstrates
 
-**Built for:** Portfolio demonstration targeting Platform Engineer roles at companies like Twitch, focusing on scalable APIs and distributed systems.
+✅ **GraphQL API** - Custom HTTP-based GraphQL implementation  
+✅ **WebSocket Server** - Real-time bidirectional messaging  
+✅ **Event-Driven Architecture** - Redis/RabbitMQ message queuing  
+✅ **Microservices** - Docker containerization and orchestration  
+✅ **CI/CD Pipeline** - Automated testing, linting, and deployment  
+✅ **Monitoring Stack** - Prometheus metrics and Grafana dashboards
+
+**Built for:** Portfolio demonstration targeting Platform Engineer roles, focusing on scalable APIs and distributed systems.
 
 ---
 
-## ✨ Key Features
+## ✨ Current Features
 
-### 🚀 **GraphQL API Server**
-- Custom GraphQL implementation with HTTP handlers
-- Query validation and error handling
-- Health checks and metrics endpoints
-- Graceful shutdown and connection management
+### 🚀 **GraphQL API Server** (Port 8080)
+- Custom GraphQL endpoint with JSON responses
+- Health check and readiness probes
+- Prometheus metrics endpoint
+- Graceful shutdown handling
+- CORS support for web clients
 
-### 🔌 **WebSocket Real-Time Server**  
-- Concurrent connection handling (50k+ connections/instance)
+### 🔌 **WebSocket Server** (Port 8081)
+- Concurrent connection management (50k+ connections)
 - Room-based pub/sub messaging
-- Automatic client reconnection
-- Message broadcasting and fanout
+- Client lifecycle management
+- Automatic reconnection support
+- Message broadcasting
 
-### 🐳 **Containerized Infrastructure**
-- PostgreSQL for primary data storage
-- Redis for caching and pub/sub
-- RabbitMQ for reliable message queuing  
-- Prometheus + Grafana for monitoring
+### 🐳 **Docker Infrastructure**
+- **PostgreSQL** - Primary database (Port 5432)
+- **Redis** - Caching and pub/sub (Port 6379)
+- **RabbitMQ** - Message queue (Port 5672, Management: 15672)
+- **Prometheus** - Metrics collection (Port 9090)
+- **Grafana** - Metrics visualization (Port 3000)
+- **Jaeger** - Distributed tracing (Port 16686)
 
-### 📊 **Observability Stack**
-- Prometheus metrics collection
-- Grafana dashboards
-- Structured logging
-- Health and readiness probes
+### 📊 **CI/CD Pipeline**
+- ✅ Automated linting with golangci-lint
+- ✅ Unit and integration testing
+- ✅ Multi-platform binary builds
+- ✅ Docker image creation
+- ✅ Security scanning with Gosec
+- ✅ Code coverage reporting
 
 ---
 
@@ -68,29 +77,27 @@ A high-performance API platform built with Go, showcasing production-ready patte
 
 ### Technology Stack
 
-| Component | Technology | Purpose |
+| Component | Technology | Version |
 |-----------|-----------|---------|
-| **Language** | Go 1.21+ | High-performance, statically-typed backend |
-| **API** | Custom GraphQL | Type-safe API with flexible querying |
-| **Real-Time** | Gorilla WebSocket | Low-latency bidirectional messaging |
-| **Database** | PostgreSQL | Relational data storage |
-| **Cache** | Redis | High-speed caching and pub/sub |
-| **Queue** | RabbitMQ | Reliable message delivery |
-| **Monitoring** | Prometheus + Grafana | Metrics and visualization |
-| **CI/CD** | GitHub Actions | Automated testing and deployment |
+| **Language** | Go | 1.21+ |
+| **API** | Custom GraphQL over HTTP | - |
+| **Real-Time** | Gorilla WebSocket | v1.5+ |
+| **Database** | PostgreSQL | 16 |
+| **Cache** | Redis | 7 |
+| **Queue** | RabbitMQ | 3 |
+| **Monitoring** | Prometheus + Grafana | Latest |
+| **CI/CD** | GitHub Actions | - |
 
 ---
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-**macOS Setup:**
+### Prerequisites (macOS)
 ```bash
 # Install Homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# Install required tools
+# Install tools
 brew install go git docker
 brew install --cask docker visual-studio-code
 
@@ -98,52 +105,46 @@ brew install --cask docker visual-studio-code
 open -a Docker
 ```
 
-**Other Platforms:** See [SETUP_MACOS.md](SETUP_MACOS.md) for detailed instructions.
-
 ### Installation
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/Tinle0301/Streaming-platform-API.git
 cd Streaming-platform-API
 
-# Install dependencies
+# Install Go dependencies
 go mod download
 
-# Start Docker services (PostgreSQL, Redis, RabbitMQ, etc.)
+# Start Docker services
 make docker-up
 
-# Build the project
+# Build binaries
 make build
 ```
 
 ### Running the Application
 
-**Option 1: Using Make (Recommended)**
+**Option 1: Using Make**
 ```bash
-# Terminal 1: Start API server
+# Terminal 1: API Server
 make run-api
 
-# Terminal 2: Start WebSocket server
+# Terminal 2: WebSocket Server  
 make run-ws
 ```
 
-**Option 2: Using VS Code Debugger**
+**Option 2: VS Code Debugger**
 ```bash
-# Open in VS Code
 code .
-
-# Press F5 (or fn+F5 on Mac) → Select "Launch All Servers"
-# Set breakpoints and debug!
+# Press F5 or fn+F5 → Select "Launch All Servers"
 ```
 
-**Option 3: Run Built Binaries**
+**Option 3: Built Binaries**
 ```bash
-# After `make build`
 ./bin/api-server
 ./bin/ws-server
 ```
 
-### Testing the API
+### Testing
 
 **GraphQL Playground:**
 ```bash
@@ -162,7 +163,7 @@ curl -X POST http://localhost:8080/graphql \
   -d '{"query":"query { hello message }"}'
 ```
 
-**Response:**
+**Expected Response:**
 ```json
 {
   "data": {
@@ -172,295 +173,228 @@ curl -X POST http://localhost:8080/graphql \
 }
 ```
 
+**WebSocket Test:**
+```bash
+npm install -g wscat
+wscat -c "ws://localhost:8081/ws?user_id=test_user"
+# Type: {"type":"ping"}
+```
+
 ---
 
 ## 📁 Project Structure
 ```
-streaming-platform-api/
+Streaming-platform-API/
 ├── cmd/
-│   ├── api-server/          # GraphQL API server entrypoint
-│   └── ws-server/            # WebSocket server entrypoint
+│   ├── api-server/          # GraphQL API entrypoint
+│   └── ws-server/           # WebSocket server entrypoint
 ├── internal/
-│   ├── websocket/            # WebSocket hub and client management
-│   │   ├── hub.go           # Connection hub with pub/sub
-│   │   └── client.go        # Client connection handler
-│   └── events/               # Event publishing system
-│       └── publisher.go     # Redis/RabbitMQ event publisher
-├── deployments/docker/       # Docker configurations
-│   ├── docker-compose.yml   # All services definition
-│   ├── Dockerfile.api       # API server container
-│   ├── Dockerfile.ws        # WebSocket server container
-│   └── prometheus.yml       # Prometheus config
-├── .github/workflows/        # CI/CD pipelines
-│   └── ci.yml               # Lint, test, build pipeline
-├── .vscode/                  # VS Code configuration
-│   ├── launch.json          # Debug configurations
-│   ├── settings.json        # Editor settings
-│   └── tasks.json           # Build tasks
-├── api/graphql/              # GraphQL schema
-│   └── schema.graphqls      # Complete API schema
-├── docs/                     # Documentation
-│   ├── architecture.md      # System design
-│   └── testing.md           # Testing strategies
-├── Makefile                  # Build automation
-├── go.mod                    # Go dependencies
-└── README.md                 # This file
+│   ├── websocket/           # WebSocket hub & client
+│   │   ├── hub.go          # Connection management
+│   │   └── client.go       # Client handler
+│   └── events/              # Event publishing
+│       └── publisher.go    # Redis/RabbitMQ publisher
+├── deployments/docker/      # Docker configs
+│   ├── docker-compose.yml  # All services
+│   ├── Dockerfile.api      # API container
+│   ├── Dockerfile.ws       # WebSocket container
+│   └── prometheus.yml      # Prometheus config
+├── .github/workflows/       # CI/CD
+│   └── ci.yml              # GitHub Actions
+├── .vscode/                 # VS Code config
+│   ├── launch.json         # Debugging
+│   └── settings.json       # Editor settings
+├── api/graphql/             # GraphQL schema
+│   └── schema.graphqls     # Full API schema
+├── docs/                    # Documentation
+├── Makefile                 # Build automation
+└── README.md                # This file
 ```
 
 ---
 
 ## 🛠️ Development
 
-### Available Commands
+### Make Commands
 ```bash
-make help              # Show all available commands
-make build             # Build both API and WebSocket servers
-make run-api           # Run API server
-make run-ws            # Run WebSocket server
-make test              # Run all tests
-make lint              # Run code quality checks
-make docker-up         # Start all Docker services
-make docker-down       # Stop all Docker services
-make docker-logs       # View service logs
-make clean             # Clean build artifacts
+make help          # Show all commands
+make build         # Build binaries
+make run-api       # Run API server
+make run-ws        # Run WebSocket server
+make test          # Run tests
+make lint          # Run linter
+make docker-up     # Start Docker services
+make docker-down   # Stop Docker services
+make docker-logs   # View logs
+make clean         # Clean artifacts
 ```
 
-### VS Code Integration
+### VS Code Features
 
-This project includes complete VS Code configuration:
+- ✅ Auto-format on save
+- ✅ Integrated debugging (F5)
+- ✅ Code snippets
+- ✅ Task runner
+- ✅ Recommended extensions
 
-- **Auto-format on save** with `gofmt`
-- **Integrated debugging** - Press F5 to start
-- **Code snippets** for common patterns
-- **Task runner** for build commands
-- **Recommended extensions** auto-install
-
-**Debug Configurations:**
-- `Launch API Server` - Debug API server only
-- `Launch WebSocket Server` - Debug WS server only
-- `Launch All Servers` - Debug both servers simultaneously
-
-### Running Tests
-```bash
-# Run all tests
-make test
-
-# Run with coverage
-go test -v -race -coverprofile=coverage.out ./...
-
-# View coverage report
-go tool cover -html=coverage.out
-```
-
-### Code Quality
-```bash
-# Run linter
-make lint
-
-# Format code
-go fmt ./...
-
-# Check for issues
-golangci-lint run
-```
+**Debug:** Press `F5` (or `fn+F5` on Mac) to start with breakpoints!
 
 ---
 
 ## 🧪 API Examples
 
-### GraphQL Queries
-
-The API currently implements demo resolvers. In production, these would connect to the database:
+### GraphQL
 ```graphql
-# Get hello message
+# Current demo query
 query {
   hello
   message
 }
 
-# Future: Stream queries
+# Future: Production queries
 query GetStream {
   stream(id: "stream_123") {
     id
     title
     viewerCount
-    status
-  }
-}
-
-# Future: User notifications
-query GetNotifications {
-  notifications(limit: 10) {
-    id
-    type
-    message
-    createdAt
   }
 }
 ```
 
-### WebSocket Connection
+### WebSocket
 ```bash
-# Install wscat
-npm install -g wscat
+# Connect
+wscat -c "ws://localhost:8081/ws?user_id=test"
 
-# Connect to WebSocket server
-wscat -c "ws://localhost:8081/ws?user_id=test_user"
-
-# Send message
+# Send
 {"type":"ping"}
 
-# Response
-{"type":"pong","timestamp":"2026-01-10T..."}
+# Receive
+{"type":"pong","timestamp":"..."}
 ```
 
 ---
 
-## 📊 Monitoring & Observability
+## 📊 Monitoring
 
-### Access Dashboards
+### Dashboards
 
-Once services are running (`make docker-up`):
+| Service | URL | Credentials |
+|---------|-----|-------------|
+| **GraphQL Playground** | http://localhost:8080/playground | - |
+| **API Health** | http://localhost:8080/health | - |
+| **Prometheus** | http://localhost:9090 | - |
+| **Grafana** | http://localhost:3000 | admin/admin |
+| **RabbitMQ** | http://localhost:15672 | streamhub/streamhub_password |
+| **Jaeger** | http://localhost:16686 | - |
 
-| Service | URL | Credentials | Purpose |
-|---------|-----|-------------|---------|
-| **GraphQL Playground** | http://localhost:8080/playground | - | Test GraphQL queries |
-| **API Health** | http://localhost:8080/health | - | Service health check |
-| **Prometheus** | http://localhost:9090 | - | Metrics collection |
-| **Grafana** | http://localhost:3000 | admin/admin | Metrics visualization |
-| **RabbitMQ** | http://localhost:15672 | streamhub/streamhub_password | Message queue management |
+### Metrics
 
-### Metrics Collected
-
-- API request latency (p50, p95, p99)
-- WebSocket connection count
-- Active connections per room
+- Request latency (p50, p95, p99)
+- Connection count
 - Message throughput
 - Error rates
-- System resources (CPU, memory)
+- Resource usage
 
 ---
 
 ## 🚢 Deployment
 
-### Docker Deployment
+### Docker
 ```bash
-# Build Docker images
+# Build images
 docker build -f deployments/docker/Dockerfile.api -t streamhub-api .
 docker build -f deployments/docker/Dockerfile.ws -t streamhub-ws .
 
-# Run with docker-compose
+# Run with compose
 docker-compose -f deployments/docker/docker-compose.yml up -d
 ```
 
-### Production Considerations
+### Production Ready
 
-- **Load Balancing**: Deploy multiple instances behind ALB/nginx
-- **Auto-scaling**: Scale based on CPU/connection count
-- **Database**: Use managed PostgreSQL (AWS RDS)
-- **Caching**: Use managed Redis (AWS ElastiCache)
-- **Monitoring**: CloudWatch, Datadog, or New Relic
-- **Secrets**: AWS Secrets Manager or HashiCorp Vault
+- Load balancing (ALB/nginx)
+- Auto-scaling (ECS/Kubernetes)
+- Managed databases (RDS)
+- Managed cache (ElastiCache)
+- Secrets management (AWS Secrets Manager)
+- Monitoring (CloudWatch/Datadog)
 
 ---
 
 ## 🎯 Skills Demonstrated
 
 ### Backend Development
-✅ **Go Programming** - Idiomatic Go with concurrency patterns  
-✅ **API Design** - GraphQL schema design and implementation  
-✅ **Real-Time Systems** - WebSocket connection management  
-✅ **Database Integration** - PostgreSQL with connection pooling  
-✅ **Caching Strategies** - Redis for performance optimization  
+✅ Go programming with concurrency  
+✅ GraphQL API design  
+✅ WebSocket real-time systems  
+✅ Database integration (PostgreSQL)  
+✅ Caching strategies (Redis)
 
-### Infrastructure & DevOps
-✅ **Docker** - Multi-container application orchestration  
-✅ **CI/CD** - Automated testing and deployment pipelines  
-✅ **Monitoring** - Prometheus metrics and Grafana dashboards  
-✅ **Logging** - Structured logging with context  
+### DevOps & Infrastructure
+✅ Docker containerization  
+✅ CI/CD pipelines (GitHub Actions)  
+✅ Monitoring (Prometheus/Grafana)  
+✅ Structured logging
 
 ### Software Engineering
-✅ **Clean Architecture** - Separation of concerns  
-✅ **Error Handling** - Graceful degradation  
-✅ **Testing** - Unit and integration tests  
-✅ **Documentation** - Comprehensive project docs  
+✅ Clean architecture  
+✅ Error handling  
+✅ Testing strategies  
+✅ Documentation
 
 ---
 
-## 📈 Performance Characteristics
+## 📈 Performance
 
-### Target Metrics
+### Targets
 
-| Metric | Target | Notes |
-|--------|--------|-------|
-| **API Latency** | p99 < 100ms | GraphQL query response time |
-| **Throughput** | 10,000+ RPS | Requests per second per instance |
-| **WebSocket Connections** | 50,000+ | Concurrent connections per instance |
-| **Message Latency** | < 500ms | End-to-end message delivery |
-| **Availability** | 99.95% | Production uptime SLA |
-
-### Scalability
-
-- Horizontal scaling to 100+ instances
-- Handles millions of WebSocket connections
-- Processes billions of messages per day
-- Multi-region deployment ready
-
----
-
-## 🤝 Contributing
-
-Contributions welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+| Metric | Target |
+|--------|--------|
+| API Latency | p99 < 100ms |
+| Throughput | 10,000+ RPS |
+| Connections | 50,000+ concurrent |
+| Message Latency | < 500ms |
+| Availability | 99.95% |
 
 ---
 
 ## 📚 Documentation
 
-- [**Quick Start Guide**](QUICKSTART.md) - Get running in 10 minutes
-- [**macOS Setup**](SETUP_MACOS.md) - Detailed macOS installation
-- [**Architecture Overview**](docs/architecture.md) - System design decisions
-- [**Testing Guide**](docs/testing.md) - Testing strategies
-- [**Project Summary**](PROJECT_SUMMARY.md) - Executive overview
-- [**Visual Overview**](VISUAL_OVERVIEW.md) - Architecture diagrams
+- **[Quick Start](QUICKSTART.md)** - 10-minute guide
+- **[macOS Setup](SETUP_MACOS.md)** - Detailed installation
+- **[Architecture](docs/architecture.md)** - System design
+- **[Testing](docs/testing.md)** - Test strategies
+- **[Project Summary](PROJECT_SUMMARY.md)** - Overview
+- **[Visual Guide](VISUAL_OVERVIEW.md)** - Diagrams
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - See [LICENSE](LICENSE) file
 
 ---
 
 ## 👨‍💻 Author
 
-**Tin Le**  
-Portfolio Project - January 2026
+**Tin Le** - Portfolio Project (January 2026)
 
 **GitHub:** [@Tinle0301](https://github.com/Tinle0301)  
-**Project:** [Streaming-platform-API](https://github.com/Tinle0301/Streaming-platform-API)
+**Repository:** [Streaming-platform-API](https://github.com/Tinle0301/Streaming-platform-API)
 
 ---
 
-## 🎓 Learning Resources
+## 🎓 What I Learned
 
-This project was built to demonstrate production-ready backend development skills:
-
-- **Go Best Practices** - Effective Go patterns and idioms
-- **GraphQL Design** - API schema design and resolver patterns  
-- **WebSocket Architecture** - Real-time bidirectional communication
-- **Microservices** - Service decomposition and communication
-- **DevOps** - CI/CD pipelines and containerization
-
----
-
-**⭐ If you find this project helpful, please consider giving it a star!**
+- Building scalable Go applications
+- GraphQL API implementation
+- WebSocket architecture at scale
+- Microservices patterns
+- CI/CD automation
+- Production monitoring
 
 ---
 
-*Built with ❤️ using Go, GraphQL, WebSocket, Docker, and passion for clean code.*
+**⭐ Star this repo if you find it helpful!**
+
+*Built with ❤️ using Go, GraphQL, WebSocket, and Docker*
