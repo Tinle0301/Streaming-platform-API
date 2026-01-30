@@ -82,7 +82,7 @@ A high-performance API platform built with **Go**, showcasing production-ready p
 | **Language** | Go | 1.21+ |
 | **API** | Custom GraphQL over HTTP | - |
 | **Real-Time** | Gorilla WebSocket | v1.5+ |
-| **Database** | PostgreSQL | 16 |
+| **Database** | PostgreSQL | 15 |
 | **Cache** | Redis | 7 |
 | **Queue** | RabbitMQ | 3 |
 | **Monitoring** | Prometheus + Grafana | Latest |
@@ -167,8 +167,8 @@ curl -X POST http://localhost:8080/graphql \
 ```json
 {
   "data": {
-    "hello": "Hello from StreamHub API! 🚀",
-    "message": "GraphQL resolvers would be implemented here in production."
+    "hello": "Hello from StreamHub API! 🚀 This is a portfolio demo project.",
+    "message": "GraphQL resolvers would be implemented here in a production application."
   }
 }
 ```
@@ -203,7 +203,10 @@ Streaming-platform-API/
 │   └── ci.yml              # GitHub Actions
 ├── .vscode/                 # VS Code config
 │   ├── launch.json         # Debugging
-│   └── settings.json       # Editor settings
+│   ├── settings.json       # Editor settings
+│   ├── tasks.json          # Task runner
+│   ├── go.code-snippets    # Code snippets
+│   └── extensions.json     # Recommended extensions
 ├── api/graphql/             # GraphQL schema
 │   └── schema.graphqls     # Full API schema
 ├── docs/                    # Documentation
@@ -217,16 +220,33 @@ Streaming-platform-API/
 
 ### Make Commands
 ```bash
-make help          # Show all commands
-make build         # Build binaries
-make run-api       # Run API server
-make run-ws        # Run WebSocket server
-make test          # Run tests
-make lint          # Run linter
-make docker-up     # Start Docker services
-make docker-down   # Stop Docker services
-make docker-logs   # View logs
-make clean         # Clean artifacts
+make help             # Show all commands
+make build            # Build all binaries
+make build-api        # Build API server only
+make build-ws         # Build WebSocket server only
+make run              # Run both servers concurrently
+make run-api          # Run API server
+make run-ws           # Run WebSocket server
+make test             # Run all tests
+make test-coverage    # Run tests with HTML coverage report
+make test-integration # Run integration tests
+make test-load        # Run load tests with k6
+make lint             # Run linters
+make fmt              # Format code
+make generate         # Generate GraphQL code
+make docker-build     # Build Docker images
+make docker-up        # Start Docker services
+make docker-down      # Stop Docker services
+make docker-logs      # View logs
+make clean            # Clean build artifacts
+make deps             # Download dependencies
+make deps-update      # Update dependencies
+make install-tools    # Install development tools
+make benchmark        # Run benchmarks
+make dev              # Start development environment
+make migrate          # Run database migrations
+make migrate-down     # Rollback migrations
+make migrate-create   # Create a new migration
 ```
 
 ### VS Code Features
@@ -371,7 +391,7 @@ docker-compose -f deployments/docker/docker-compose.yml up -d
 
 ## 📄 License
 
-MIT License - See [LICENSE](LICENSE) file
+MIT License
 
 ---
 
