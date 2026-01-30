@@ -1,0 +1,222 @@
+# Streaming Platform API - Claude Context
+
+## Project Overview
+Production-ready streaming platform API built with Go, featuring GraphQL API, WebSocket servers, and comprehensive infrastructure. This project demonstrates advanced platform engineering skills for backend/infrastructure roles at companies like Twitch.
+
+## Tech Stack
+- **Language**: Go 1.21+
+- **API Framework**: GraphQL (gqlgen)
+- **Database**: PostgreSQL with migrations
+- **Cache Layer**: Redis
+- **Message Queue**: RabbitMQ for async processing
+- **Monitoring**: Prometheus + Grafana
+- **Containerization**: Docker & Docker Compose
+- **Real-time**: WebSocket servers
+
+## Architecture Overview
+```
+┌─────────────────┐
+│  GraphQL API    │ ← HTTP/HTTPS requests
+├─────────────────┤
+│ WebSocket Server│ ← Real-time connections
+├─────────────────┤
+│  PostgreSQL     │ ← Primary data store
+│  Redis          │ ← Caching layer
+│  RabbitMQ       │ ← Message queue
+├─────────────────┤
+│  Prometheus     │ ← Metrics collection
+│  Grafana        │ ← Visualization
+└─────────────────┘
+```
+
+## Project Structure
+```
+streaming-platform-api/
+├── cmd/
+│   ├── api/          # GraphQL API server entry point
+│   └── websocket/    # WebSocket server entry point
+├── internal/
+│   ├── domain/       # Business logic & domain models
+│   ├── repository/   # Data access layer
+│   ├── service/      # Business services
+│   ├── handler/      # GraphQL resolvers
+│   └── middleware/   # HTTP/WS middleware
+├── pkg/
+│   ├── database/     # DB connection utilities
+│   ├── redis/        # Redis client wrapper
+│   └── rabbitmq/     # Message queue client
+├── api/
+│   └── graphql/
+│       └── schema/   # GraphQL schema definitions
+├── deployments/
+│   ├── docker/       # Dockerfiles
+│   └── docker-compose.yml
+├── migrations/       # Database migrations
+├── scripts/          # Helper scripts
+└── docs/            # Documentation
+```
+
+## Key Directories Explained
+- **`cmd/`**: Application entry points - main.go files for different services
+- **`internal/`**: Private application code that cannot be imported by other projects
+  - Domain-driven design with clear separation of concerns
+  - Repository pattern for data access
+  - Service layer for business logic
+- **`pkg/`**: Public libraries that can be imported by other projects
+- **`api/graphql/schema/`**: GraphQL schema definitions (.graphql files)
+- **`deployments/`**: Infrastructure as code, Docker configurations
+- **`migrations/`**: SQL migration files for database schema versioning
+
+## Development Guidelines
+
+### Go Best Practices
+- Follow standard Go project layout
+- Use dependency injection for testability
+- Implement interfaces for abstractions
+- Use context.Context for cancellation and timeouts
+- Proper error handling with wrapped errors
+- Use Go modules for dependency management
+
+### Code Organization
+- Keep business logic in the domain layer
+- Use repository pattern for data access
+- Implement service layer for complex operations
+- GraphQL resolvers should be thin, delegating to services
+- Separate concerns: handlers → services → repositories
+
+### Error Handling
+```go
+// Wrap errors with context
+if err != nil {
+    return fmt.Errorf("failed to create stream: %w", err)
+}
+
+// Use custom error types for domain errors
+type NotFoundError struct {
+    Resource string
+    ID       string
+}
+```
+
+### Database Operations
+- Always use transactions for multi-step operations
+- Use prepared statements to prevent SQL injection
+- Implement connection pooling
+- Add proper indexes for query performance
+- Use migrations for schema changes
+
+### Testing Strategy
+- Unit tests for business logic
+- Integration tests for repositories
+- Use testcontainers for database tests
+- Mock external dependencies
+- Aim for >80% coverage on critical paths
+
+### Observability
+- Add structured logging (logrus/zap)
+- Expose Prometheus metrics
+- Include tracing with OpenTelemetry (if applicable)
+- Monitor: latency, error rates, throughput
+- Add health check endpoints
+
+### WebSocket Implementation
+- Handle connection lifecycle properly
+- Implement ping/pong for connection health
+- Use goroutines for concurrent message handling
+- Implement backpressure mechanisms
+- Add authentication/authorization
+
+### Security
+- Validate all inputs
+- Use parameterized queries
+- Implement rate limiting
+- Add authentication middleware
+- Use HTTPS in production
+- Sanitize GraphQL inputs
+
+## Common Patterns
+
+### Repository Pattern
+```go
+type StreamRepository interface {
+    Create(ctx context.Context, stream *Stream) error
+    GetByID(ctx context.Context, id string) (*Stream, error)
+    Update(ctx context.Context, stream *Stream) error
+    Delete(ctx context.Context, id string) error
+}
+```
+
+### Service Pattern
+```go
+type StreamService struct {
+    repo  StreamRepository
+    cache *redis.Client
+    queue *rabbitmq.Client
+}
+
+func (s *StreamService) CreateStream(ctx context.Context, input CreateStreamInput) (*Stream, error) {
+    // Business logic here
+}
+```
+
+### Dependency Injection
+```go
+// Wire up dependencies in main.go
+func main() {
+    db := database.NewPostgres(config)
+    cache := redis.NewClient(config)
+    
+    repo := repository.NewStreamRepository(db)
+    service := service.NewStreamService(repo, cache)
+    resolver := handler.NewResolver(service)
+}
+```
+
+## Infrastructure Considerations
+- Use Docker multi-stage builds for smaller images
+- Implement graceful shutdown
+- Add health check endpoints (/health, /ready)
+- Use environment variables for configuration
+- Implement circuit breakers for external services
+- Add retry logic with exponential backoff
+
+## Performance Optimization
+- Use Redis for frequently accessed data
+- Implement database query caching
+- Use connection pooling
+- Batch database operations when possible
+- Optimize GraphQL resolvers to avoid N+1 queries
+- Use DataLoader pattern for GraphQL
+
+## Deployment
+- Build optimized Docker images
+- Use docker-compose for local development
+- Implement rolling deployments
+- Add readiness and liveness probes
+- Monitor resource usage (CPU, memory, connections)
+
+## Current Project Focus
+Building a portfolio-ready streaming platform that demonstrates:
+- Advanced Go programming skills
+- Microservices architecture
+- Real-time communication (WebSockets)
+- Event-driven architecture (RabbitMQ)
+- Observability and monitoring
+- Production-ready patterns and practices
+- Infrastructure knowledge (Docker, databases, caching)
+
+## Relevant Experience
+- Backend engineer targeting platform engineering roles
+- Experience with Go and Python
+- Focus on production-ready, scalable systems
+- Building portfolio projects for companies like Twitch
+
+## When Helping
+- Provide production-ready code, not just examples
+- Include error handling and edge cases
+- Add comments explaining complex logic
+- Suggest performance optimizations
+- Consider scalability and maintainability
+- Include relevant tests when appropriate
+- Follow Go idioms and conventions
+- Think about observability (logging, metrics)
